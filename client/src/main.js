@@ -2,8 +2,8 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 
 import App from './App.vue'
-import Home from './Home.vue'
-import EmployeeDetail from './EmployeeDetail.vue'
+import Home from './home/Home.vue'
+import EmployeeDetail from './employee/EmployeeDetail.vue'
 
 Vue.use(VueRouter)
 
