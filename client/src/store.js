@@ -9,12 +9,15 @@ const mutationTypes = {
   LOAD_EMPLOYEES: 'LOAD_EMPLOYEES',
   CLEAR_EMPLOYEES: 'CLEAR_EMPLOYEES',
   SELECT_EMPLOYEES: 'SELECT_EMPLOYEES',
+  CLEAR_EMPLOYEE_SELECTION: 'CLEAR_EMPLOYEE_SELECTION',
   LOAD_FEATURED: 'LOAD_FEATURED',
   CLEAR_FEATURED: 'CLEAR_FEATURED',
   SET_AUTHENTICATION: 'SET_AUTHENTICATION',
   CLEAR_AUTHENTICATION: 'CLEAR_AUTHENTICATION',
   UI_OPEN_SEARCH: 'UI_OPEN_SEARCH',
   UI_CLOSE_SEARCH: 'UI_CLOSE_SEARCH',
+  UI_SET_SEARCH_QUERY: 'UI_SET_SEARCH_QUERY',
+  UI_CLEAR_SEARCH_QUERY: 'UI_CLEAR_SEARCH_QUERY',
 }
 
 const store = new Vuex.Store({
@@ -41,12 +44,18 @@ const store = new Vuex.Store({
   mutations: {
     [mutationTypes.LOAD_EMPLOYEES](state, employees) {
       state.employees.all = employees
+      state.employees.selected = employees.slice()
     },
     [mutationTypes.CLEAR_EMPLOYEES](state) {
       state.employees.all = []
     },
     [mutationTypes.SELECT_EMPLOYEES](state, query) {
-      state.employees.selected = state.employees.all.filter(e => e.name.toLowerCase().includes(query))
+      state.employees.selected = state.employees.all.filter(
+        e => e.name.toLowerCase().includes(query.toLowerCase())
+      )
+    },
+    [mutationTypes.CLEAR_EMPLOYEE_SELECTION](state) {
+      state.employees.selected = state.employees.all.slice()
     },
 
     [mutationTypes.LOAD_FEATURED](state, featured) {
@@ -70,6 +79,13 @@ const store = new Vuex.Store({
       state.ui.search.isSearching = false
     },
 
+    [mutationTypes.UI_SET_SEARCH_QUERY](state, query) {
+      state.ui.search.query = query
+    },
+    [mutationTypes.UI_CLEAR_SEARCH_QUERY](state) {
+      state.ui.search.query = ''
+    },
+
   },
 
   actions: {
@@ -80,6 +96,10 @@ const store = new Vuex.Store({
     selectEmployees({ commit }, query) {
       commit(mutationTypes.SELECT_EMPLOYEES, query)
     },
+    clearEmployeeSelection({ commit }) {
+      commit(mutationTypes.CLEAR_EMPLOYEE_SELECTION)
+    },
+
     openSearch({ commit }) {
       commit(mutationTypes.UI_OPEN_SEARCH)
     },
@@ -87,6 +107,18 @@ const store = new Vuex.Store({
       commit(mutationTypes.UI_CLOSE_SEARCH)
     },
 
+    setSearchQuery({ commit }, query) {
+      commit(mutationTypes.UI_SET_SEARCH_QUERY, query)
+    },
+
+    search({ dispatch }, query) {
+      dispatch('setSearchQuery', query)
+        .then(dispatch('selectEmployees', query))
+    },
+    clearSearch({ dispatch }) {
+      dispatch('setSearchQuery', '')
+        .then(dispatch('clearEmployeeSelection'))
+    },
   },
 })
 
