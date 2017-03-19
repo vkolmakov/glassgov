@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <navbar />
-    <employee-list v-if="isSearching" />
+    <employee-list v-if="isSearching" :employees="selectedEmployees" />
     <router-view v-else></router-view>
   </div>
 </template>
@@ -20,6 +20,7 @@ export default {
 
   computed: mapState({
     isSearching: state => state.ui.search.isSearching,
+    selectedEmployees: state => state.employees.selected,
   }),
 
   created() {
