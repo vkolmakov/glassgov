@@ -3,38 +3,45 @@
     <input type="text"
            v-model="query"
            @keyup="onInput"
-           @focus="onFocus"
-           @blur="onBlur" />
+           @focus="onFocus" />
+    <search-close-button
+        :onClick="onCloseSearchClick" />
   </div>
 </template>
 
 <script>
-import { mapActions } from 'vuex'
+import { mapActions, mapState } from 'vuex'
+import SearchCloseButton from './SearchCloseButton.vue'
 
 export default {
-  data() {
-    return {
-      query: '',
-    }
+  components: {
+    SearchCloseButton,
+  },
+
+  computed: {
+    ...mapState({
+      query: state => state.ui.search.query,
+    })
   },
 
   methods: {
     onInput(e) {
-      const query = this.query
-      this.selectEmployees(query)
+      const query = e.target.value
+      this.search(query)
     },
     onFocus() {
       this.openSearch()
     },
-    onBlur() {
-      if (!this.query) {
-        this.closeSearch()
-      }
+    onCloseSearchClick() {
+      const { clearSearch, closeSearch } = this
+      clearSearch()
+        .then(closeSearch)
     },
     ...mapActions({
-      selectEmployees: 'selectEmployees',
       openSearch: 'openSearch',
       closeSearch: 'closeSearch',
+      search: 'search',
+      clearSearch: 'clearSearch',
     }),
   },
 }
