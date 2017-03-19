@@ -5,6 +5,7 @@
            @keyup="onInput"
            @focus="onFocus" />
     <search-close-button
+        v-if="isSearching"
         :onClick="onCloseSearchClick" />
   </div>
 </template>
@@ -21,6 +22,7 @@ export default {
   computed: {
     ...mapState({
       query: state => state.ui.search.query,
+      isSearching: state => state.ui.search.isSearching,
     })
   },
 

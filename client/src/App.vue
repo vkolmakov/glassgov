@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <navbar />
-    <employee-list v-if="isSearching" :employees="selectedEmployees" />
+    <employee-list v-if="isSearching" :maybeEmployees="selectedEmployees" />
     <router-view v-else></router-view>
   </div>
 </template>

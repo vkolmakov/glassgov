@@ -41,9 +41,9 @@ export default {
     employee() {
       const { id } = this
       const { getEmployeeById }= this.$store.getters
-      const employee = Maybe.fromNullable(getEmployeeById(id))
+      const maybeEmployee = getEmployeeById(id)
 
-      return employee.getOrElse(missingEmployee)
+      return maybeEmployee.getOrElse(missingEmployee)
     }
   },
 

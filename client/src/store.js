@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 
+import { Maybe, identity, filter, find } from './utils'
 import * as api from './api'
 
 Vue.use(Vuex)
@@ -23,11 +24,11 @@ const mutationTypes = {
 const store = new Vuex.Store({
   state: {
     employees: {
-      all: [],
-      selected: [],
+      all: Maybe.Nothing(),
+      selected: Maybe.Nothing(),
     },
 
-    featured: [],
+    featured: Maybe.Nothing(),
 
     auth: {
       isAuthenticated: false,
@@ -43,26 +44,25 @@ const store = new Vuex.Store({
 
   mutations: {
     [mutationTypes.LOAD_EMPLOYEES](state, employees) {
-      state.employees.all = employees
-      state.employees.selected = employees.slice()
+      state.employees.all = Maybe.Just(employees)
+      state.employees.selected = Maybe.Just(employees)
     },
     [mutationTypes.CLEAR_EMPLOYEES](state) {
-      state.employees.all = []
+      state.employees.all = Maybe.Just([])
     },
     [mutationTypes.SELECT_EMPLOYEES](state, query) {
-      state.employees.selected = state.employees.all.filter(
-        e => e.name.toLowerCase().includes(query.toLowerCase())
-      )
+      const isMatchingQuery = e => e.name.toLowerCase().includes(query.toLowerCase())
+      state.employees.selected = state.employees.all.map(filter(isMatchingQuery))
     },
     [mutationTypes.CLEAR_EMPLOYEE_SELECTION](state) {
-      state.employees.selected = state.employees.all.slice()
+      state.employees.selected = state.employees.all.map(identity)
     },
 
     [mutationTypes.LOAD_FEATURED](state, featured) {
-      state.featured = featured
+      state.featured = Maybe.Just(featured)
     },
     [mutationTypes.CLEAR_FEATURED](state) {
-      state.featured = []
+      state.featured = Maybe.Just([])
     },
 
     [mutationTypes.SET_AUTHENTICATION](state) {
@@ -122,7 +122,10 @@ const store = new Vuex.Store({
   },
 
   getters: {
-    getEmployeeById: (state) => (id) => state.employees.all.find(e => e.id === id),
+    getEmployeeById: state => (id) => {
+      const findById = find(e => e.id === id)
+      return state.employees.all.map(findById)
+    },
   },
 })
 
