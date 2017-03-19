@@ -13,10 +13,10 @@ Vue.use(VueRouter)
 
 const router = new VueRouter({
   routes: [
-    { path: '/', component: Home },
+    { path: '/', component: Home, name: 'home' },
     { path: '/employee/:id', component: EmployeeDetail },
-    { path: '/signin', component: SignIn },
-    { path: '/signup', component: SignUp },
+    { path: '/signin', component: SignIn, name: 'signin' },
+    { path: '/signup', component: SignUp, name: 'signup' },
   ],
   mode: 'history',
 })

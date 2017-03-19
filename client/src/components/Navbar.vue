@@ -2,8 +2,8 @@
   <nav>
     <logo />
     <search />
-    <link-wrapper text="Sign In" url="/signin" />
-    <link-wrapper text="Sign Up" url="/signup" />
+    <link-wrapper :to="{ name: 'signin' }">Sign In</link-wrapper>
+    <link-wrapper :to="{ name: 'signup' }">Sign Up</link-wrapper>
   </nav>
 </template>
 

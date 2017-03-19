@@ -1,9 +1,23 @@
 <template>
-  <a :href="url">{{ text }}</a>
+  <span @click="onRedirect">
+    <router-link :to="to">
+      <slot></slot>
+    </router-link>
+  </span>
 </template>
 
 <script>
+import { mapActions } from 'vuex'
+
 export default {
-  props: ['text', 'url'],
+  props: ['to'],
+  methods: {
+    onRedirect() {
+      this.closeSearch()
+    },
+    ...mapActions({
+      closeSearch: 'closeSearch',
+    }),
+  }
 }
 </script>
