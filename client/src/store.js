@@ -120,6 +120,10 @@ const store = new Vuex.Store({
         .then(dispatch('clearEmployeeSelection'))
     },
   },
+
+  getters: {
+    getEmployeeById: (state) => (id) => state.employees.all.find(e => e.id === id),
+  },
 })
 
 export default store
