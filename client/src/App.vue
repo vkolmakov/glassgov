@@ -1,8 +1,10 @@
 <template>
   <div id="app">
     <navbar />
-    <employee-list v-if="isSearching" :maybeEmployees="selectedEmployees" />
-    <router-view v-else></router-view>
+    <main>
+      <employee-list v-if="isSearching" :maybeEmployees="selectedEmployees" />
+      <router-view v-else></router-view>
+    </main>
   </div>
 </template>
 
@@ -38,16 +40,21 @@ export default {
   --text-color: #444;
   --text-em-color: #222;
   --primary-color: #77a3f5;
+  --secondary-color: #fff;
 }
 
 body {
-  margin: 0 auto;
-  max-width: 50em;
   font-family: "Open Sans", "Helvetica", "Arial", sans-serif;
   line-height: 1.5;
-  padding: 0 1.5em;
-
+  margin: 0;
+  padding: 0;
   color: var(--text-color);
+}
+
+main {
+  margin: 0 auto;
+  max-width: 50em;
+  padding: 0 1.5em;
 }
 
 h1, h2 {
