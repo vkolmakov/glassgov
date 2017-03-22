@@ -32,3 +32,29 @@ export default {
   })
 }
 </script>
+
+<style>
+:root {
+  --text-color: #444;
+  --text-em-color: #222;
+  --primary-color: #77a3f5;
+}
+
+body {
+  margin: 0 auto;
+  max-width: 50em;
+  font-family: "Open Sans", "Helvetica", "Arial", sans-serif;
+  line-height: 1.5;
+  padding: 0 1.5em;
+
+  color: var(--text-color);
+}
+
+h1, h2 {
+  color: var(--text-em-color);
+}
+
+a {
+  color: var(--primary-color);
+}
+</style>
