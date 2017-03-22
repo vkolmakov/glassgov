@@ -1,21 +1,20 @@
 <template>
   <div v-if="isReady">
-    <link-wrapper v-for="employee in employees"
-                  :key="employee.id"
-                  :to="{ name: 'employee', params: { id: employee.id } }">
-      <employee-list-entry :employee="employee" />
-    </link-wrapper>
+      <employee-list-entry
+          v-for="employee in employees"
+          :key="employee.id"
+          :employee="employee" />
   </div>
 
   <div v-else>
-    <Loading/>
+    <loading />
   </div>
 
 </template>
 
 <script>
 import EmployeeListEntry from './EmployeeListEntry.vue'
-import LinkWrapper from './LinkWrapper.vue'
+
 import Loading from './Loading.vue'
 
 export default {
@@ -23,7 +22,6 @@ export default {
 
   components: {
     EmployeeListEntry,
-    LinkWrapper,
     Loading
   },
 
