@@ -41,10 +41,12 @@ export default {
   --text-em-color: #222;
   --primary-color: #77a3f5;
   --secondary-color: #fff;
+  --tertiary-color: #f1f1f1;
+  --default-font: "Open Sans", "Helvetica", "Arial", sans-serif;
 }
 
 body {
-  font-family: "Open Sans", "Helvetica", "Arial", sans-serif;
+  font-family: var(--default-font);
   line-height: 1.5;
   margin: 0;
   padding: 0;

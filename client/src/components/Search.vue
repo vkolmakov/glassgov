@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="search-group">
     <input type="text"
            v-model="query"
            @keyup="onInput"
@@ -48,3 +48,26 @@ export default {
   },
 }
 </script>
+
+<style scoped>
+.search-group {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  witdh: 100%;
+}
+
+.search-group > input {
+  width: 100%;
+  height: 2.5em;
+  background-color: var(--secondary-color);
+  border: .1em solid var(--tertiary-color);
+  border-radius: .4em;
+  box-shadow: none;
+
+  font-family: var(--font-family);
+  font-size: 0.9em;
+
+  padding: 0.3em 1em;
+}
+</style>

@@ -15,3 +15,9 @@ export default {
   },
 }
 </script>
+
+<style scoped>
+img {
+  color: var(--secondary-color);
+}
+</style>
