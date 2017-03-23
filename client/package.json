@@ -13,6 +13,7 @@
     "ramda": "^0.23.0",
     "vue": "^2.2.1",
     "vue-router": "2.2.1",
+    "vue-star-rating": "^1.2.2",
     "vuex": "2.2.1"
   },
   "devDependencies": {
