@@ -15,7 +15,7 @@
 <script>
 import EmployeeListEntry from './EmployeeListEntry.vue'
 
-import Loading from './Loading.vue'
+import Loading from '../components/Loading.vue'
 
 export default {
   props: ['maybeEmployees'],

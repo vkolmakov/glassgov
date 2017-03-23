@@ -10,13 +10,13 @@
         <h2>{{ employee.title }}, {{ employee.salary }}</h2>
         <star-rating :rating="employee.rating" />
       </div>
-  </div>
-        </link-wrapper>
+    </div>
+  </link-wrapper>
 </template>
 
 <script>
-import LinkWrapper from './LinkWrapper.vue'
-import StarRating from './StarRating.vue'
+import LinkWrapper from '../components/LinkWrapper.vue'
+import StarRating from '../components/StarRating.vue'
 
 export default {
   props: ['employee'],

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <employee-list-entry :employee="employee" />
+    <employee :employee="employee" />
     <comments :maybeComments="comments" />
   </div>
 </template>
@@ -8,7 +8,7 @@
 <script>
 import { mapGetters } from 'vuex'
 
-import EmployeeListEntry from '../components/EmployeeListEntry.vue'
+import Employee from './Employee.vue'
 import Comments from './Comments.vue'
 
 import { getComments } from '../api'
@@ -33,7 +33,7 @@ export default {
   },
 
   components: {
-    EmployeeListEntry,
+    Employee,
     Comments,
   },
 

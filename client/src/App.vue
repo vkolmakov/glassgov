@@ -12,7 +12,7 @@
 import { mapActions, mapState } from 'vuex'
 
 import Navbar from './components/Navbar.vue'
-import EmployeeList from './components/EmployeeList.vue'
+import EmployeeList from './search/EmployeeList.vue'
 
 export default {
   components: {

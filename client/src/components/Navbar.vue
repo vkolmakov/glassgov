@@ -12,7 +12,7 @@
 <script>
 import Logo from './Logo.vue'
 import LinkWrapper from './LinkWrapper.vue'
-import Search from './Search.vue'
+import Search from '../search/Search.vue'
 
 export default {
   components: {
