@@ -1,24 +1,12 @@
 <template>
-  <span @click="onRedirect">
-    <router-link :to="to">
-      <slot></slot>
-    </router-link>
-  </span>
+  <router-link :to="to">
+    <slot></slot>
+  </router-link>
 </template>
 
 <script>
-import { mapActions } from 'vuex'
-
 export default {
   props: ['to'],
-  methods: {
-    onRedirect() {
-      this.closeSearch()
-    },
-    ...mapActions({
-      closeSearch: 'closeSearch',
-    }),
-  }
 }
 </script>
 

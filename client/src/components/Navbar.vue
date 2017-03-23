@@ -36,7 +36,7 @@ nav > ul {
   list-style-type: none;
 }
 
-nav > ul > li > * > a {
+nav > ul > li > a {
   color: var(--secondary-color);
 }
 </style>
