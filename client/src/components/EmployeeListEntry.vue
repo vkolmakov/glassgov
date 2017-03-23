@@ -8,7 +8,7 @@
       <div class="right">
         <h1>{{ employee.name }}</h1>
         <h2>{{ employee.title }}, {{ employee.salary }}</h2>
-        <h2>{{ employee.rating }}</h2>
+        <star-rating :rating="employee.rating" />
       </div>
   </div>
         </link-wrapper>
@@ -16,12 +16,14 @@
 
 <script>
 import LinkWrapper from './LinkWrapper.vue'
+import StarRating from './StarRating.vue'
 
 export default {
   props: ['employee'],
 
   components: {
     LinkWrapper,
+    StarRating,
   },
 
   computed: {
@@ -63,7 +65,7 @@ export default {
 }
 
 .employee > .right {
-  flex: 1;
+  flex: 2;
   display: flex;
   flex-flow: column wrap;
   justify-content: center;
