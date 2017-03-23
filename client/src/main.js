@@ -21,9 +21,8 @@ const router = new VueRouter({
   mode: 'history',
 })
 
-router.beforeEach((to, from, next) => {
+router.afterEach((to, from) => {
   store.dispatch('closeSearch')
-    .then(next)
 })
 
 new Vue({
