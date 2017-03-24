@@ -54,9 +54,9 @@ body {
 }
 
 main {
-  margin: 0 auto;
+  margin: 0 auto 1em auto;
   max-width: 50em;
-  padding: 0 1.5em;
+  padding: 0.5em 1.5em;
 }
 
 h1, h2 {
