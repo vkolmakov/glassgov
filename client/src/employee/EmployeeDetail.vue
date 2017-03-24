@@ -1,7 +1,7 @@
 <template>
   <div>
     <employee :employee="employee" />
-    <comments :maybeComments="comments" />
+    <comment-list :maybeComments="comments" />
   </div>
 </template>
 
@@ -9,7 +9,7 @@
 import { mapGetters } from 'vuex'
 
 import Employee from './Employee.vue'
-import Comments from './Comments.vue'
+import CommentList from './CommentList.vue'
 
 import { getComments } from '../api'
 import { Maybe, compose } from '../utils'
@@ -34,7 +34,7 @@ export default {
 
   components: {
     Employee,
-    Comments,
+    CommentList,
   },
 
   computed: {

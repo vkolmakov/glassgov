@@ -1,11 +1,12 @@
 <template>
   <star-rating
-      :read-only="!isWritable"
+      :read-only="!writable"
       :rating="rating"
-      :increment="isWritable ? 1.0 : 0.01"
+      :increment="writable ? 1.0 : 0.01"
       :active-color="primaryColor"
       :inactive-color="tertiaryColor"
       :border-color="secondaryColor"
+      :show-rating="!hideText"
       :star-size="25"></star-rating>
 </template>
 
@@ -13,7 +14,7 @@
 import StarRating from 'vue-star-rating'
 
 export default {
-  props: ['rating', 'isWritable'],
+  props: ['rating', 'writable', 'hideText'],
   components: {
     StarRating,
   },

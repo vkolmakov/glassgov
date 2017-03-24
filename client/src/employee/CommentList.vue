@@ -1,23 +1,25 @@
 <template>
-  <div>
 
-    <ul v-if="ready">
-      <li v-for="c in comments">
-        {{ c.user }}: {{ c.comment}} - {{ c.rating}}
-      </li>
-    </ul>
-
-    <loading v-else />
-
+  <div class="comments" v-if="ready">
+    <comment v-for="comment in comments"
+             :comment="comment"
+             :key="comment.id"></comment>
   </div>
+
+  <div v-else>
+    <loading></loading>
+  </div>
+
 </template>
 
 <script>
 import Loading from '../components/Loading.vue'
+import Comment from './Comment.vue'
 
 export default {
   components: {
     Loading,
+    Comment,
   },
 
   props: ['maybeComments'],
@@ -35,3 +37,10 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+.comments {
+  padding: 1em;
+  background-color: var(--tertiary-color);
+}
+</style>

@@ -5,9 +5,9 @@ const mockEmployees = [
 ]
 
 const mockComments = [
-  { user: 'John', comment: `I've seen better`, rating: 2.0 },
-  { user: 'Doge', comment: 'Much amaze', rating: 5.0 },
-  { user: 'Ben', comment: `I'm Ben!`, rating: 4.0 },
+  { user: 'John', text: `I've seen better`, rating: 2.0, id: 0 },
+  { user: 'Doge', text: 'Much amaze', rating: 5.0, id: 1 },
+  { user: 'Ben', text: `I'm Ben!`, rating: 4.0, id: 2 },
 ]
 
 export function getEmployees() {
