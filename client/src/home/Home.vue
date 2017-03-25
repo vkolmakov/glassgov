@@ -8,18 +8,25 @@
 
     <div class="featured">
       <h1>Featured Officials</h1>
-      <featured />
+      <featured-list :maybeFeatured="maybeFeatured"></featured-list>
     </div>
+
   </div>
 </template>
 
 <script>
-import Featured from './Featured.vue'
+import { mapState } from 'vuex'
+
+import FeaturedList from './FeaturedList.vue'
 
 export default {
   components: {
-    Featured,
-  }
+    FeaturedList,
+  },
+
+  computed: mapState({
+    maybeFeatured: state => state.featured,
+  }),
 }
 </script>
 
@@ -34,6 +41,10 @@ export default {
 
 .description > h1 {
   margin: 0;
+  text-align: center;
+}
+
+.featured > h1 {
   text-align: center;
 }
 </style>

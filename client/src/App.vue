@@ -26,11 +26,13 @@ export default {
   }),
 
   created() {
+    this.loadFeatured();
     this.loadEmployees()
   },
 
   methods: mapActions({
     loadEmployees: 'loadEmployees',
+    loadFeatured: 'loadFeatured',
   })
 }
 </script>

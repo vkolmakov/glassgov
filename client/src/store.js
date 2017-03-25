@@ -119,6 +119,11 @@ const store = new Vuex.Store({
       dispatch('setSearchQuery', '')
         .then(dispatch('clearEmployeeSelection'))
     },
+
+    loadFeatured({ commit }) {
+      api.getFeatured()
+        .then(featured => commit(mutationTypes.LOAD_FEATURED, featured))
+    },
   },
 
   getters: {
