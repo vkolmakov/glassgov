@@ -1,13 +1,15 @@
 <template>
   <star-rating
+      text-class="star-rating-label"
       :read-only="!writable"
       :rating="rating"
-      :increment="writable ? 1.0 : 0.01"
+      :increment="writable ? 1.0 : 0.1"
       :active-color="primaryColor"
-      :inactive-color="tertiaryColor"
-      :border-color="secondaryColor"
+      :inactive-color="secondaryColor"
+      :border-color="tertiaryColor"
+      :border-width="2"
       :show-rating="!hideText"
-      :star-size="25"></star-rating>
+      :star-size="14"></star-rating>
 </template>
 
 <script>
@@ -36,3 +38,11 @@ export default {
   },
 }
 </script>
+
+<style>
+.star-rating-label {
+  font-size: 14px;
+  margin-bottom: 8px;
+  margin-left: 7px;
+}
+</style>

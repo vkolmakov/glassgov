@@ -43,6 +43,14 @@ export default {
   --secondary-color: #fff;
   --tertiary-color: #f1f1f1;
   --default-font: "Open Sans", "Helvetica", "Arial", sans-serif;
+
+  font-size: 0.85em;
+}
+
+@media (min-width: 748px) {
+  :root {
+    font-size: 1.2em;
+  }
 }
 
 body {

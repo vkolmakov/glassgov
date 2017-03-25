@@ -66,7 +66,7 @@ export default {
   box-shadow: none;
 
   font-family: var(--font-family);
-  font-size: 0.9em;
+  font-size: 0.9rem;
 
   padding: 0.3em 1em;
 }

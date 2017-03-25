@@ -43,41 +43,40 @@ export default {
 .employee {
   display: flex;
   flex-flow: row nowrap;
-  justify-content: center;
   align-items: center;
   height: 175px;
   margin: 1.5em 0;
+
+  background: var(--tertiary-color);
+  padding: 0 1em;
 }
 
 .employee > .left {
-  flex: 1;
-  max-height: 140px;
+  max-height: 110px;
   padding-right: 20px;
   display: flex;
-  justify-content: flex-end;
 }
 
 .employee > .left > img {
-  max-width: 140px;
+  max-width: 110px;
   object-fit: cover;
   border-radius: 100%;
   border: 1px solid var(--tertiary-color);
 }
 
 .employee > .right {
-  flex: 2;
   display: flex;
   flex-flow: column wrap;
   justify-content: center;
 }
 
 .employee > .right > h1 {
-  font-size: 1.8rem;
+  font-size: 1.6rem;
   margin: 0;
 }
 
 .employee > .right > h2 {
-  font-size: 1.2em;
+  font-size: 1.1rem;
   margin: 0
 }
 
