@@ -1,7 +1,8 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 
-import { Maybe, identity, filter, find } from './utils'
+import { Maybe, identity, filter, find, redirectTo } from './utils'
+import { routeNames } from './router'
 import * as api from './api'
 
 Vue.use(Vuex)
@@ -101,6 +102,7 @@ const store = new Vuex.Store({
     },
 
     openSearch({ commit }) {
+      redirectTo(routeNames.search)
       commit(mutationTypes.UI_OPEN_SEARCH)
     },
     closeSearch({ commit }) {

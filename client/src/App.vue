@@ -2,14 +2,13 @@
   <div id="app">
     <navbar />
     <main>
-      <employee-list v-if="isSearching" :maybeEmployees="selectedEmployees" />
-      <router-view v-else></router-view>
+      <router-view></router-view>
     </main>
   </div>
 </template>
 
 <script>
-import { mapActions, mapState } from 'vuex'
+import { mapActions } from 'vuex'
 
 import Navbar from './components/Navbar.vue'
 import EmployeeList from './search/EmployeeList.vue'
@@ -19,11 +18,6 @@ export default {
     Navbar,
     EmployeeList,
   },
-
-  computed: mapState({
-    isSearching: state => state.ui.search.isSearching,
-    selectedEmployees: state => state.employees.selected,
-  }),
 
   created() {
     this.loadFeatured();

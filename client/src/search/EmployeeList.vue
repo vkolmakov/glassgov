@@ -1,5 +1,5 @@
 <template>
-  <div v-if="isReady">
+  <div v-if="ready">
       <employee-list-entry
           v-for="employee in employees"
           :key="employee.id"
@@ -13,20 +13,19 @@
 </template>
 
 <script>
-import EmployeeListEntry from './EmployeeListEntry.vue'
+import { mapState } from 'vuex'
 
+import EmployeeListEntry from './EmployeeListEntry.vue'
 import Loading from '../components/Loading.vue'
 
 export default {
-  props: ['maybeEmployees'],
-
   components: {
     EmployeeListEntry,
     Loading
   },
 
   computed: {
-    isReady() {
+    ready() {
       return this.maybeEmployees.matchWith({
         Just: () => true,
         Nothing: () => false,
@@ -34,7 +33,12 @@ export default {
     },
     employees() {
       return this.maybeEmployees.getOrElse([])
-    }
+    },
+    ...mapState({
+      isSearching: state => state.ui.search.isSearching,
+      maybeEmployees: state => state.employees.selected,
+    }),
+
   },
 }
 </script>
