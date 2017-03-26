@@ -59,10 +59,10 @@ export default {
 
 .search-group > input {
   width: 100%;
-  height: 1.8em;
+  height: 1.6em;
   background-color: var(--secondary-color);
   border: .1em solid var(--tertiary-color);
-  border-radius: .4em;
+  border-radius: 0.4em;
   box-shadow: none;
 
   font-family: var(--font-family);
