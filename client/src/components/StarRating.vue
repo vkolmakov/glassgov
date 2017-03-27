@@ -9,18 +9,31 @@
       :border-color="tertiaryColor"
       :border-width="2"
       :show-rating="!hideText"
-      :star-size="14"></star-rating>
+      :star-size="14"
+      @rating-selected="onRatingSelected"></star-rating>
 </template>
 
 <script>
+import { identity } from '../utils'
 import StarRating from 'vue-star-rating'
 
 export default {
-  props: ['rating', 'writable', 'hideText'],
+  props: {
+    rating: { type : Number, default: 0 },
+    writable: { type: Boolean, default: false },
+    hideText: { type: Boolean, default: false },
+    onSelect: { type: Function, default: identity },
+  },
+
   components: {
     StarRating,
   },
+
   methods: {
+    onRatingSelected(rating) {
+      this.onSelect(rating)
+    },
+
     getCssVariable(name) {
       return window.getComputedStyle(document.body).getPropertyValue(name)
     },
