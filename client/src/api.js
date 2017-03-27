@@ -37,3 +37,11 @@ export function getFeatured() {
     })
   }, 300)
 }
+
+export function submitRating({ rating, comment, user, employee }) {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve()
+    }, 300)
+  })
+}
