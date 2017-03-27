@@ -32,7 +32,7 @@ const store = new Vuex.Store({
     featured: Maybe.Nothing(),
 
     auth: {
-      isAuthenticated: false,
+      authenticated: false,
     },
 
     ui: {
@@ -67,10 +67,10 @@ const store = new Vuex.Store({
     },
 
     [mutationTypes.SET_AUTHENTICATION](state) {
-      state.auth.isAuthenticated = true
+      state.auth.authenticated = true
     },
     [mutationTypes.CLEAR_AUTHENTICATION](state) {
-      state.auth.isAuthenticated = false
+      state.auth.authenticated = false
     },
 
     [mutationTypes.UI_OPEN_SEARCH](state) {

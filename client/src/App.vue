@@ -38,6 +38,7 @@ export default {
   --primary-color: #77a3f5;
   --secondary-color: #fff;
   --tertiary-color: #f1f1f1;
+  --danger-color: #ffcccc;
   --default-font: "Open Sans", "Helvetica", "Arial", sans-serif;
 
   font-size: 0.85em;
