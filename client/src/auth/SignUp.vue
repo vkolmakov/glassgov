@@ -7,6 +7,8 @@
 </template>
 
 <script>
+import { MIN_PASSWORD_LENGTH } from '../constants'
+
 import FormTemplate from '../components/FormTemplate.vue'
 
 export default {
@@ -22,17 +24,29 @@ export default {
           name: 'email',
           label: 'Email',
           type: 'email',
-          validate: email => email && email.includes('@') && email.includes('.'),
+          validation: {
+            validate: email => email && email.includes('@') && email.includes('.'),
+            hasError: false,
+            errorMessage: 'Please enter a valid email',
+          },
         }, {
           name: 'password',
           label: 'Password',
           type: 'password',
-          validate: password => password && password.length > 8,
+          validation: {
+            validate: password => password && password.length >= MIN_PASSWORD_LENGTH,
+            hasError: false,
+            errorMessage: `Password must be longer than ${MIN_PASSWORD_LENGTH} digits`,
+          },
         }, {
           name: 'repeat-password',
           label: 'Repeat Password',
           type: 'password',
-          validate: repeatPassword => repeatPassword && repeatPassword.length > 8,
+          validation: {
+            validate: (repeatPassword, otherFields) => otherFields.password === repeatPassword,
+            hasError: false,
+            errorMessage: `Passwords must match!`,
+          },
         }],
         onSubmit: formData => console.log("submitted!", formData)
       }

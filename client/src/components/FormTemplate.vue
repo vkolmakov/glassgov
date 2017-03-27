@@ -58,16 +58,19 @@ export default {
       const values = this.getValues(event)
       const valuesWithFields = zip(values, this.fields)
 
-      const fieldsWithErrors = valuesWithFields.filter(([value, field]) => !field.validation.validate(value))
-                                               .map(([value, field]) => field)
+      const fieldNames = map(prop('name'), this.fields)
+      const zipWithFieldNames = zipObj(fieldNames)
+
+      const fieldNameToValue = zipWithFieldNames(values)
+
+      const fieldsWithErrors = valuesWithFields
+        .filter(([value, field]) => !field.validation.validate(value, fieldNameToValue))
+        .map(([value, field]) => field)
 
       if (fieldsWithErrors.length > 0) {
         this.displayErrors(fieldsWithErrors)
       } else {
-        const fieldNames = map(prop('name'), this.fields)
-        const zipWithFieldNames = zipObj(fieldNames)
-
-        this.onSubmit(zipWithFieldNames(values))
+        this.onSubmit(fieldNameToValue)
       }
     }
   }
