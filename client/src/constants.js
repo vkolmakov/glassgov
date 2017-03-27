@@ -7,3 +7,5 @@ export const missingEmployee = {
   rating: 0,
   id: -1,
 }
+
+export const MIN_PASSWORD_LENGTH = 8

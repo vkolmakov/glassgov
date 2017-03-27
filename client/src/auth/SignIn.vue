@@ -18,6 +18,7 @@
 <script>
 import { mapActions } from 'vuex'
 import { Maybe } from '../utils'
+import { MIN_PASSWORD_LENGTH } from '../constants'
 
 import FormTemplate from '../components/FormTemplate.vue'
 import Loading from '../components/Loading.vue'
@@ -41,12 +42,20 @@ export default {
           name: 'email',
           label: 'Email',
           type: 'email',
-          validate: email => email && email.includes('@') && email.includes('.'),
+          validation: {
+            validate: email => email && email.includes('@') && email.includes('.'),
+            hasError: false,
+            errorMessage: 'Please enter a valid email',
+          },
         }, {
           name: 'password',
           label: 'Password',
           type: 'password',
-          validate: password => password && password.length > 8,
+          validation: {
+            validate: password => password && password.length >= MIN_PASSWORD_LENGTH,
+            hasError: false,
+            errorMessage: `Password must be longer than ${MIN_PASSWORD_LENGTH} digits`,
+          },
         }],
         onSubmit: ({ email, password }) => {
           const { showSpinner, hideSpinner, signIn, setError, clearError } = this

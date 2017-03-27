@@ -4,8 +4,9 @@
     <h1>{{ title }}</h1>
 
     <form @submit.prevent="handleSubmit">
-      <div v-for="field in fields" class="form-group">
+      <div v-for="field in fields" :class="`form-group ${field.validation.hasError ? 'has-error' : ''}`">
         <label :for="field.name">{{ field.label }}</label>
+        <label v-if="field.validation.hasError" class="error-message">{{ field.validation.errorMessage }}</label>
         <input :type="field.type" :name="field.name" />
       </div>
 
@@ -18,7 +19,7 @@
 </template>
 
 <script>
-import { map, dropLast, compose, path, prop, zipObj } from '../utils'
+import { map, dropLast, compose, path, prop, zipObj, zip } from '../utils'
 
 export default {
   props: {
@@ -29,18 +30,45 @@ export default {
   },
 
   methods: {
-    handleSubmit(event) {
+    getValues(event) {
       const getElements = path(['target', 'elements'])
       const getElementValue = prop('value')
       const dropLastOne = dropLast(1)
 
-      const fieldNames = map(prop('name'), this.fields)
-      const zipWithFieldNames = zipObj(fieldNames)
-
       const getValues = compose(map(getElementValue), dropLastOne, getElements)
-      const getResult = compose(zipWithFieldNames, getValues)
 
-      this.onSubmit(getResult(event))
+      return getValues(event)
+    },
+
+    displayErrors(fieldsWithErrors) {
+      this.fields.forEach(field => {
+        if (fieldsWithErrors.find(f => f.name === field.name)) {
+          field.validation.hasError = true
+        }
+      })
+    },
+
+    clearErrors() {
+      this.fields.forEach(field => field.validation.hasError = false)
+    },
+
+    handleSubmit(event) {
+      this.clearErrors()
+
+      const values = this.getValues(event)
+      const valuesWithFields = zip(values, this.fields)
+
+      const fieldsWithErrors = valuesWithFields.filter(([value, field]) => !field.validation.validate(value))
+                                               .map(([value, field]) => field)
+
+      if (fieldsWithErrors.length > 0) {
+        this.displayErrors(fieldsWithErrors)
+      } else {
+        const fieldNames = map(prop('name'), this.fields)
+        const zipWithFieldNames = zipObj(fieldNames)
+
+        this.onSubmit(zipWithFieldNames(values))
+      }
     }
   }
 }
@@ -56,6 +84,7 @@ export default {
   margin: 1em 0;
   display: flex;
   flex-flow: row wrap;
+  justify-content: space-between;
 }
 
 .form-group > label {
@@ -81,5 +110,13 @@ export default {
   height: 2.2em;
   font-size: 0.9rem;
   color: var(--secondary-color);
+}
+
+.form-group.has-error {
+  color: var(--danger-color);
+}
+
+.form-group.has-error > input {
+  border: .1em solid var(--danger-color);
 }
 </style>
