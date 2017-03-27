@@ -11,6 +11,7 @@
   animation: spin 0.5s infinite;
   margin: 0 auto;
   border-radius: 50%;
+  margin-top: 1em;
 }
 
 @keyframes spin {

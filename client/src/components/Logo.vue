@@ -1,7 +1,7 @@
 <template>
   <div>
     <link-wrapper text="GlassGov" :to="{ name: 'home' }">
-      <img alt="glassgov" src=""/>
+      <h1 class="logo" >GlassGov</h1>
     </link-wrapper>
   </div>
 </template>
@@ -17,7 +17,8 @@ export default {
 </script>
 
 <style scoped>
-img {
+.logo {
+  margin: 0;
   color: var(--secondary-color);
 }
 </style>

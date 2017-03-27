@@ -1,6 +1,7 @@
 <template>
   <div class="search-group">
     <input type="text"
+           placeholder="Search"
            v-model="query"
            @keyup="onInput"
            @focus="onFocus" />

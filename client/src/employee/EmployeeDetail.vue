@@ -7,8 +7,9 @@
                       :employee="employee"
                       :afterSubmitted="loadComments"></add-comment-form>
 
-    <p class="error-message" v-if="errorLoadingComments">{{ maybeError.getOrElse('Error loading comments.') }}</p>
-    <comment-list v-else :maybeComments="maybeComments" />
+    <error-message :maybeMessage="maybeError"></error-message>
+
+    <comment-list :maybeComments="maybeComments" />
   </div>
 
 </template>
@@ -19,6 +20,7 @@ import { mapGetters, mapState } from 'vuex'
 import Employee from './Employee.vue'
 import CommentList from './CommentList.vue'
 import AddCommentForm from './AddCommentForm.vue'
+import ErrorMessage from '../components/ErrorMessage.vue'
 
 import { getComments } from '../api'
 import { Maybe, compose } from '../utils'
@@ -41,6 +43,7 @@ export default {
     Employee,
     CommentList,
     AddCommentForm,
+    ErrorMessage,
   },
 
   computed: {
