@@ -45,3 +45,12 @@ export function submitRating({ rating, comment, user, employee }) {
     }, 300)
   })
 }
+
+export function signIn({ email, password }) {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      const token = 'supersecret'
+      resolve(token)
+    }, 300)
+  })
+}

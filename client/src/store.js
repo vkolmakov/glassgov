@@ -3,7 +3,9 @@ import Vuex from 'vuex'
 
 import { Maybe, identity, filter, find, redirectTo } from './utils'
 import { routeNames } from './router'
+import { setAuthToken } from './auth/actions'
 import * as api from './api'
+
 
 Vue.use(Vuex)
 
@@ -14,12 +16,14 @@ const mutationTypes = {
   CLEAR_EMPLOYEE_SELECTION: 'CLEAR_EMPLOYEE_SELECTION',
   LOAD_FEATURED: 'LOAD_FEATURED',
   CLEAR_FEATURED: 'CLEAR_FEATURED',
-  SET_AUTHENTICATION: 'SET_AUTHENTICATION',
-  CLEAR_AUTHENTICATION: 'CLEAR_AUTHENTICATION',
+
   UI_OPEN_SEARCH: 'UI_OPEN_SEARCH',
   UI_CLOSE_SEARCH: 'UI_CLOSE_SEARCH',
   UI_SET_SEARCH_QUERY: 'UI_SET_SEARCH_QUERY',
   UI_CLEAR_SEARCH_QUERY: 'UI_CLEAR_SEARCH_QUERY',
+
+  AUTH_SET_AUTHENTICATION: 'AUTH_SET_AUTHENTICATION',
+  AUTH_CLEAR_AUTHENTICATION: 'AUTH_CLEAR_AUTHENTICATION',
 }
 
 const store = new Vuex.Store({
@@ -66,10 +70,10 @@ const store = new Vuex.Store({
       state.featured = Maybe.Just([])
     },
 
-    [mutationTypes.SET_AUTHENTICATION](state) {
+    [mutationTypes.AUTH_SET_AUTHENTICATION](state) {
       state.auth.authenticated = true
     },
-    [mutationTypes.CLEAR_AUTHENTICATION](state) {
+    [mutationTypes.AUTH_CLEAR_AUTHENTICATION](state) {
       state.auth.authenticated = false
     },
 
@@ -125,6 +129,29 @@ const store = new Vuex.Store({
     loadFeatured({ commit }) {
       api.getFeatured()
         .then(featured => commit(mutationTypes.LOAD_FEATURED, featured))
+    },
+
+    setAuthentication({ commit }) {
+      commit(mutationTypes.AUTH_SET_AUTHENTICATION)
+    },
+
+    clearAuthentication({ commit }) {
+      commit(mutationTypes.AUTH_CLEAR_AUTHENTICATION)
+    },
+
+    signUp(_, { email, password }) {
+      api.signUp({ email, password })
+    },
+
+    signIn({ dispatch }, { email, password }) {
+      const onSuccess = (token) => {
+        setAuthToken(token)
+        dispatch('setAuthentication')
+        redirectTo('home')
+      }
+
+      return api.signIn({ email, password })
+        .then(onSuccess)
     },
   },
 
