@@ -11,12 +11,10 @@
 import { mapActions } from 'vuex'
 
 import Navbar from './components/Navbar.vue'
-import EmployeeList from './search/EmployeeList.vue'
 
 export default {
   components: {
     Navbar,
-    EmployeeList,
   },
 
   created() {

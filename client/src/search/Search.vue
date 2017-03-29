@@ -1,4 +1,5 @@
 <template>
+
   <div class="search-group">
     <input type="text"
            placeholder="Search"
@@ -9,6 +10,7 @@
         v-if="isSearching"
         :onClick="onCloseSearchClick" />
   </div>
+
 </template>
 
 <script>
@@ -52,19 +54,21 @@ export default {
 
 <style scoped>
 .search-group {
+  max-width: 50em;
+  margin: 0 auto;
   display: flex;
   align-items: center;
   justify-content: center;
-  witdh: 100%;
+  padding-bottom: 0.5em;
 }
 
 .search-group > input {
-  width: 100%;
   height: 1.6em;
   background-color: var(--secondary-color);
   border: .1em solid var(--tertiary-color);
   border-radius: 0.4em;
   box-shadow: none;
+  flex: 1;
 
   font-family: var(--font-family);
   font-size: 0.9rem;
