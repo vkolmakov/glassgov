@@ -4,7 +4,7 @@
     <div class="top">
       <textarea name="comment-text"
                 v-model="comment"
-                :placeholder="`Comment on ${employee.name} here`"></textarea>
+                :placeholder="`Comment on ${employee.name} here...`"></textarea>
     </div>
 
     <div class="bottom">
@@ -121,10 +121,16 @@ export default {
   background-color: var(--primary-color);
   color: var(--secondary-color);
 
+  cursor: pointer;
+
   padding: 0 0.8em;
   border: .1em solid var(--tertiary-color);
   border-radius: 0.4em;
   height: 2.2em;
   font-size: 0.9rem;
+}
+
+.add-comment > .bottom > button:hover {
+  border: .1em solid var(--secondary-color);
 }
 </style>

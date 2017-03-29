@@ -113,6 +113,7 @@ export default {
   height: 2.2em;
   font-size: 0.9rem;
   color: var(--secondary-color);
+  cursor: pointer;
 }
 
 .form-group.has-error {
