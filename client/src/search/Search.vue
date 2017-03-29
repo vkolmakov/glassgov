@@ -1,27 +1,20 @@
 <template>
 
   <div class="search-group">
-    <input type="text"
-           placeholder="Search"
+    <input type="search"
+           placeholder="Start typing to search here"
            v-model="query"
            @keyup="onInput"
+           @search="onSearchEventCleanUp"
            @focus="onFocus" />
-    <search-close-button
-        v-if="isSearching"
-        :onClick="onCloseSearchClick" />
   </div>
 
 </template>
 
 <script>
 import { mapActions, mapState } from 'vuex'
-import SearchCloseButton from './SearchCloseButton.vue'
 
 export default {
-  components: {
-    SearchCloseButton,
-  },
-
   computed: {
     ...mapState({
       query: state => state.ui.search.query,
@@ -30,6 +23,17 @@ export default {
   },
 
   methods: {
+    onSearchEventCleanUp(e) {
+      // search event is triggered by either pressing enter key
+      // or clicking on the clear icon in the input[type=search]
+      // this handler will make sure that clearing the input is handled properly.
+      const query = e.target.value
+
+      if (query === '') {
+        this.onCloseSearchClick()
+      }
+    },
+
     onInput(e) {
       const query = e.target.value
       this.search(query)
@@ -73,6 +77,6 @@ export default {
   font-family: var(--font-family);
   font-size: 0.9rem;
 
-  padding: 0.3em 1em;
+  padding: 1em 1em;
 }
 </style>
