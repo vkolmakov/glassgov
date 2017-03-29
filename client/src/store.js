@@ -3,7 +3,7 @@ import Vuex from 'vuex'
 
 import { Maybe, identity, filter, find, redirectTo } from './utils'
 import { routeNames } from './router'
-import { setAuthToken } from './auth/actions'
+import { setAuthToken, clearAuthToken } from './auth/actions'
 import * as api from './api'
 
 
@@ -152,6 +152,11 @@ const store = new Vuex.Store({
 
       return api.signIn({ email, password })
         .then(onSuccess)
+    },
+
+    signOut({ dispatch }) {
+      return clearAuthToken()
+        .then(() => dispatch('clearAuthentication'))
     },
   },
 

@@ -3,13 +3,16 @@
     <ul>
       <li><logo /></li>
       <li><search /></li>
-      <li><link-wrapper :to="{ name: 'signin' }">Sign In</link-wrapper></li>
-      <li><link-wrapper :to="{ name: 'signup' }">Sign Up</link-wrapper></li>
+      <li v-if="!authenticated"><link-wrapper :to="{ name: 'signin' }">Sign In</link-wrapper></li>
+      <li v-if="!authenticated"><link-wrapper :to="{ name: 'signup' }">Sign Up</link-wrapper></li>
+      <li v-if="authenticated"><link-wrapper :to="{ name: 'signout' }">Sign Out</link-wrapper></li>
     </ul>
   </nav>
 </template>
 
 <script>
+import { mapState } from 'vuex'
+
 import Logo from './Logo.vue'
 import LinkWrapper from './LinkWrapper.vue'
 import Search from '../search/Search.vue'
@@ -19,7 +22,14 @@ export default {
     Logo,
     LinkWrapper,
     Search,
+  },
+
+  computed: {
+    ...mapState({
+      authenticated: state => state.auth.authenticated,
+    })
   }
+
 }
 </script>
 

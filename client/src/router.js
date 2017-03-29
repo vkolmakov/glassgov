@@ -5,9 +5,12 @@ import store from './store'
 
 import Home from './home/Home.vue'
 import EmployeeDetail from './employee/EmployeeDetail.vue'
+import EmployeeList from './search/EmployeeList.vue'
+
 import SignIn from './auth/SignIn.vue'
 import SignUp from './auth/SignUp.vue'
-import EmployeeList from './search/EmployeeList.vue'
+import SignOut from './auth/SignOut.vue'
+
 
 Vue.use(VueRouter)
 
@@ -17,6 +20,7 @@ const routes = [
   { path: '/search', component: EmployeeList, name: 'search' },
   { path: '/signin', component: SignIn, name: 'signin' },
   { path: '/signup', component: SignUp, name: 'signup' },
+  { path: '/signout', component: SignOut, name: 'signout' },
 ]
 
 export const routeNames = routes.reduce((acc, r) => ({ [r.name]: r.name, ...acc }), {})
