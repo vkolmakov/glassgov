@@ -18,7 +18,6 @@ export default {
   computed: {
     ...mapState({
       query: state => state.ui.search.query,
-      isSearching: state => state.ui.search.isSearching,
     })
   },
 
@@ -30,7 +29,7 @@ export default {
       const query = e.target.value
 
       if (query === '') {
-        this.onCloseSearchClick()
+        this.clearSearch()
       }
     },
 
@@ -41,14 +40,12 @@ export default {
     onFocus() {
       this.openSearch()
     },
-    onCloseSearchClick() {
-      const { clearSearch, closeSearch } = this
+    clearSearch() {
+      const { clearSearch } = this
       clearSearch()
-        .then(closeSearch)
     },
     ...mapActions({
       openSearch: 'openSearch',
-      closeSearch: 'closeSearch',
       search: 'search',
       clearSearch: 'clearSearch',
     }),

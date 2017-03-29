@@ -30,10 +30,4 @@ const router = new VueRouter({
   mode: 'history',
 })
 
-router.afterEach((to, from) => {
-  if (to.name !== routeNames.search) {
-    store.dispatch('closeSearch')
-  }
-})
-
 export default router

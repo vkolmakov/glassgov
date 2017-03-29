@@ -17,8 +17,6 @@ const mutationTypes = {
   LOAD_FEATURED: 'LOAD_FEATURED',
   CLEAR_FEATURED: 'CLEAR_FEATURED',
 
-  UI_OPEN_SEARCH: 'UI_OPEN_SEARCH',
-  UI_CLOSE_SEARCH: 'UI_CLOSE_SEARCH',
   UI_SET_SEARCH_QUERY: 'UI_SET_SEARCH_QUERY',
   UI_CLEAR_SEARCH_QUERY: 'UI_CLEAR_SEARCH_QUERY',
 
@@ -41,7 +39,6 @@ const store = new Vuex.Store({
 
     ui: {
       search: {
-        isSearching: false,
         query: '',
       },
     },
@@ -77,13 +74,6 @@ const store = new Vuex.Store({
       state.auth.authenticated = false
     },
 
-    [mutationTypes.UI_OPEN_SEARCH](state) {
-      state.ui.search.isSearching = true
-    },
-    [mutationTypes.UI_CLOSE_SEARCH](state) {
-      state.ui.search.isSearching = false
-    },
-
     [mutationTypes.UI_SET_SEARCH_QUERY](state, query) {
       state.ui.search.query = query
     },
@@ -105,12 +95,8 @@ const store = new Vuex.Store({
       commit(mutationTypes.CLEAR_EMPLOYEE_SELECTION)
     },
 
-    openSearch({ commit }) {
+    openSearch(_) {
       redirectTo(routeNames.search)
-      commit(mutationTypes.UI_OPEN_SEARCH)
-    },
-    closeSearch({ commit }) {
-      commit(mutationTypes.UI_CLOSE_SEARCH)
     },
 
     setSearchQuery({ commit }, query) {
@@ -119,11 +105,11 @@ const store = new Vuex.Store({
 
     search({ dispatch }, query) {
       dispatch('setSearchQuery', query)
-        .then(dispatch('selectEmployees', query))
+        .then(() => dispatch('selectEmployees', query))
     },
     clearSearch({ dispatch }) {
       dispatch('setSearchQuery', '')
-        .then(dispatch('clearEmployeeSelection'))
+        .then(() => dispatch('clearEmployeeSelection'))
     },
 
     loadFeatured({ commit }) {

@@ -35,7 +35,6 @@ export default {
       return this.maybeEmployees.getOrElse([])
     },
     ...mapState({
-      isSearching: state => state.ui.search.isSearching,
       maybeEmployees: state => state.employees.selected,
     }),
 
