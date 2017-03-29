@@ -54,3 +54,11 @@ export function signIn({ email, password }) {
     }, 300)
   })
 }
+
+export function signUp({ email, password }) {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve()
+    }, 300)
+  })
+}

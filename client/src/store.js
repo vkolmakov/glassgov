@@ -139,8 +139,10 @@ const store = new Vuex.Store({
       commit(mutationTypes.AUTH_CLEAR_AUTHENTICATION)
     },
 
-    signUp(_, { email, password }) {
-      api.signUp({ email, password })
+    signUp({ dispatch }, { email, password }) {
+      return api.signUp({ email, password }).then(
+        () => dispatch('signIn', { email, password }),
+      )
     },
 
     signIn({ dispatch }, { email, password }) {

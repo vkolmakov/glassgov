@@ -85,7 +85,6 @@ export default {
     },
 
     setError() {
-      console.log('setting error!')
       this.maybeError = Maybe.Just('Invalid email or password')
     },
 
