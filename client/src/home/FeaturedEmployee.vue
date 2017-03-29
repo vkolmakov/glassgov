@@ -1,5 +1,5 @@
 <template>
-  <link-wrapper :to="{ name: 'employee', params: { id: employee.id } }">
+  <link-wrapper class="employee-link" :to="{ name: 'employee', params: { id: employee.id } }">
     <div class="employee">
       <div class="top">
         <img :alt="photoAlt" :src="employee.photo"/>
@@ -40,12 +40,15 @@ export default {
 </script>
 
 <style scoped>
+.employee-link {
+  flex: 0 0 15em;
+}
+
 .employee {
   display: flex;
   flex-flow: column wrap;
   justify-content: center;
   align-items: center;
-  margin: 1.5em 0;
 }
 
 .employee > .top {

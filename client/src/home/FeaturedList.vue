@@ -41,7 +41,8 @@ export default {
 <style>
 .featured-list {
   display: flex;
-  flex-flow: column wrap;
-  justify-content: space-around;
+  flex-flow: row wrap;
+  justify-content: center;
+  align-items: baseline;
 }
 </style>
