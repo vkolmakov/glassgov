@@ -1,60 +1,72 @@
 <template>
   <div id="app">
-    <img src="./assets/logo.png">
-    <h1></h1>
-    <h2>Essential Links</h2>
-    <ul>
-      <li><a href="https://vuejs.org" target="_blank">Core Docs</a></li>
-      <li><a href="https://forum.vuejs.org" target="_blank">Forum</a></li>
-      <li><a href="https://gitter.im/vuejs/vue" target="_blank">Gitter Chat</a></li>
-      <li><a href="https://twitter.com/vuejs" target="_blank">Twitter</a></li>
-    </ul>
-    <h2>Ecosystem</h2>
-    <ul>
-      <li><a href="http://router.vuejs.org/" target="_blank">vue-router</a></li>
-      <li><a href="http://vuex.vuejs.org/" target="_blank">vuex</a></li>
-      <li><a href="http://vue-loader.vuejs.org/" target="_blank">vue-loader</a></li>
-      <li><a href="https://github.com/vuejs/awesome-vue" target="_blank">awesome-vue</a></li>
-    </ul>
+    <navbar />
+    <main>
+      <router-view></router-view>
+    </main>
   </div>
 </template>
 
 <script>
+import { mapActions } from 'vuex'
+
+import Navbar from './components/Navbar.vue'
+
 export default {
-  name: 'app',
-  data () {
-    return {
-      msg: 'Welcome to Your Vue.js App'
-    }
-  }
+  components: {
+    Navbar,
+  },
+
+  created() {
+    this.loadFeatured();
+    this.loadEmployees()
+  },
+
+  methods: mapActions({
+    loadEmployees: 'loadEmployees',
+    loadFeatured: 'loadFeatured',
+  })
 }
 </script>
 
 <style>
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+:root {
+  --text-color: #444;
+  --text-em-color: #222;
+  --primary-color: #77a3f5;
+  --secondary-color: #fff;
+  --tertiary-color: #f1f1f1;
+  --danger-color: #ff7a7a;
+  --default-font: "Open Sans", "Helvetica", "Arial", sans-serif;
+
+  font-size: 0.85em;
+}
+
+@media (min-width: 748px) {
+  :root {
+    font-size: 1.2em;
+  }
+}
+
+body {
+  font-family: var(--default-font);
+  line-height: 1.5;
+  margin: 0;
+  padding: 0;
+  color: var(--text-color);
+}
+
+main {
+  margin: 0 auto 1em auto;
+  max-width: 50em;
+  padding: 0.5em 1.5em;
 }
 
 h1, h2 {
-  font-weight: normal;
-}
-
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-
-li {
-  display: inline-block;
-  margin: 0 10px;
+  color: var(--text-em-color);
 }
 
 a {
-  color: #42b983;
+  color: var(--primary-color);
 }
 </style>
