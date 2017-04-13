@@ -13,6 +13,9 @@ export const path = R.path
 export const zipObj = R.zipObj
 export const prop = R.prop
 export const zip = R.zip
+export const sort = R.sort
+export const ascend = R.ascend
+export const descend = R.descend
 
 export const trace = msg => R.tap(x => console.log(msg, x))
 export const redirectTo = name => router.push({ name })

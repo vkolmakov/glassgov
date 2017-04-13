@@ -1,11 +1,12 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 
-import { Maybe, identity, filter, find, redirectTo } from './utils'
+import { Maybe, identity, filter, find, redirectTo, sort, prop, ascend, descend, compose, map } from './utils'
 import { routeNames } from './router'
 import { setAuthToken, clearAuthToken } from './auth/actions'
 import * as api from './api'
 
+import { SORT_TYPES } from './constants'
 
 Vue.use(Vuex)
 
@@ -19,6 +20,9 @@ const mutationTypes = {
 
   UI_SET_SEARCH_QUERY: 'UI_SET_SEARCH_QUERY',
   UI_CLEAR_SEARCH_QUERY: 'UI_CLEAR_SEARCH_QUERY',
+  UI_SEARCH_SORT_SALARY_ASC: 'UI_SEARCH_SORT_SALARY_ASC',
+  UI_SEARCH_SORT_SALARY_DESC: 'UI_SEARCH_SORT_SALARY_DESC',
+  UI_SEARCH_SORT_CLEAR: 'UI_SEARCH_SORT_CLEAR',
 
   AUTH_SET_AUTHENTICATION: 'AUTH_SET_AUTHENTICATION',
   AUTH_CLEAR_AUTHENTICATION: 'AUTH_CLEAR_AUTHENTICATION',
@@ -40,6 +44,9 @@ const store = new Vuex.Store({
     ui: {
       search: {
         query: '',
+        sort: {
+          salary: Maybe.Nothing(),
+        },
       },
     },
   },
@@ -81,6 +88,24 @@ const store = new Vuex.Store({
       state.ui.search.query = ''
     },
 
+    [mutationTypes.UI_SEARCH_SORT_CLEAR](state) {
+      state.ui.search.sort.salary = Maybe.Nothing()
+      state.employees.selected = state.employees.all.map(identity)
+    },
+
+    [mutationTypes.UI_SEARCH_SORT_SALARY_ASC](state) {
+      state.ui.search.sort.salary = Maybe.Just(SORT_TYPES.ASC)
+      const ascendBySalary = ascend(prop('salary'))
+      state.employees.selected = state.employees.selected.map(sort(ascendBySalary))
+    },
+
+    [mutationTypes.UI_SEARCH_SORT_SALARY_DESC](state) {
+      state.ui.search.sort.salary = Maybe.Just(SORT_TYPES.DESC)
+      const descendBySalary = descend(prop('salary'))
+      state.employees.selected = state.employees.selected.map(sort(descendBySalary))
+
+    },
+
   },
 
   actions: {
@@ -110,6 +135,18 @@ const store = new Vuex.Store({
     clearSearch({ dispatch }) {
       dispatch('setSearchQuery', '')
         .then(() => dispatch('clearEmployeeSelection'))
+    },
+
+    clearSort({ commit }) {
+      commit(mutationTypes.UI_SEARCH_SORT_CLEAR)
+    },
+
+    sortBySalaryAsc({ commit, dispatch }) {
+      commit(mutationTypes.UI_SEARCH_SORT_SALARY_ASC)
+    },
+
+    sortBySalaryDesc({ commit }) {
+      commit(mutationTypes.UI_SEARCH_SORT_SALARY_DESC)
     },
 
     loadFeatured({ commit }) {
