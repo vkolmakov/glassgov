@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 
-import { Maybe, identity, filter, find, redirectTo, sort, prop, ascend, descend, compose, map } from './utils'
+import { Maybe, identity, filter, find, redirectTo, sort, prop, ascend, descend } from './utils'
 import { routeNames } from './router'
 import { setAuthToken, clearAuthToken } from './auth/actions'
 import * as api from './api'
@@ -20,9 +20,11 @@ const mutationTypes = {
 
   UI_SET_SEARCH_QUERY: 'UI_SET_SEARCH_QUERY',
   UI_CLEAR_SEARCH_QUERY: 'UI_CLEAR_SEARCH_QUERY',
+  UI_SEARCH_SORT_CLEAR: 'UI_SEARCH_SORT_CLEAR',
   UI_SEARCH_SORT_SALARY_ASC: 'UI_SEARCH_SORT_SALARY_ASC',
   UI_SEARCH_SORT_SALARY_DESC: 'UI_SEARCH_SORT_SALARY_DESC',
-  UI_SEARCH_SORT_CLEAR: 'UI_SEARCH_SORT_CLEAR',
+  UI_SEARCH_SORT_RATING_ASC: 'UI_SEARCH_SORT_RATING_ASC',
+  UI_SEARCH_SORT_RATING_DESC: 'UI_SEARCH_SORT_RATING_DESC',
 
   AUTH_SET_AUTHENTICATION: 'AUTH_SET_AUTHENTICATION',
   AUTH_CLEAR_AUTHENTICATION: 'AUTH_CLEAR_AUTHENTICATION',
@@ -46,6 +48,7 @@ const store = new Vuex.Store({
         query: '',
         sort: {
           salary: Maybe.Nothing(),
+          rating: Maybe.Nothing(),
         },
       },
     },
@@ -103,9 +106,19 @@ const store = new Vuex.Store({
       state.ui.search.sort.salary = Maybe.Just(SORT_TYPES.DESC)
       const descendBySalary = descend(prop('salary'))
       state.employees.selected = state.employees.selected.map(sort(descendBySalary))
-
     },
 
+    [mutationTypes.UI_SEARCH_SORT_RATING_ASC](state) {
+      state.ui.search.sort.rating = Maybe.Just(SORT_TYPES.ASC)
+      const ascendByRating = ascend(prop('rating'))
+      state.employees.selected = state.employees.selected.map(sort(ascendByRating))
+    },
+
+    [mutationTypes.UI_SEARCH_SORT_RATING_DESC](state) {
+      state.ui.search.sort.rating = Maybe.Just(SORT_TYPES.DESC)
+      const descendByRating = descend(prop('rating'))
+      state.employees.selected = state.employees.selected.map(sort(descendByRating))
+    },
   },
 
   actions: {
@@ -147,6 +160,14 @@ const store = new Vuex.Store({
 
     sortBySalaryDesc({ commit }) {
       commit(mutationTypes.UI_SEARCH_SORT_SALARY_DESC)
+    },
+
+    sortByRatingAsc({ commit, dispatch }) {
+      commit(mutationTypes.UI_SEARCH_SORT_RATING_ASC)
+    },
+
+    sortByRatingDesc({ commit }) {
+      commit(mutationTypes.UI_SEARCH_SORT_RATING_DESC)
     },
 
     loadFeatured({ commit }) {

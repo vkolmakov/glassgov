@@ -7,6 +7,12 @@
           :on-clear="clearSort"
           :on-ascend="sortBySalaryAsc"
           :on-descend="sortBySalaryDesc"></sort-select>
+      <sort-select
+          property-name="rating"
+          :value="sortByRatingDirection"
+          :on-clear="clearSort"
+          :on-ascend="sortByRatingAsc"
+          :on-descend="sortByRatingDesc"></sort-select>
     </div>
 
     <employee-list-entry
@@ -41,6 +47,8 @@ export default {
       clearSort: 'clearSort',
       sortBySalaryAsc: 'sortBySalaryAsc',
       sortBySalaryDesc: 'sortBySalaryDesc',
+      sortByRatingAsc: 'sortByRatingAsc',
+      sortByRatingDesc: 'sortByRatingDesc',
     }),
   },
 
@@ -57,10 +65,14 @@ export default {
     sortBySalaryDirection() {
       return this.maybeSortBySalaryDirection.getOrElse('')
     },
+    sortByRatingDirection() {
+      return this.maybeSortByRatingDirection.getOrElse('')
+    },
 
     ...mapState({
       maybeEmployees: state => state.employees.selected,
       maybeSortBySalaryDirection: state => state.ui.search.sort.salary,
+      maybeSortByRatingDirection: state => state.ui.search.sort.rating,
     }),
 
   },
