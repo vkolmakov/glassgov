@@ -45,3 +45,20 @@ export default {
 
 }
 </script>
+
+<style>
+select {
+  height: 2.5em;
+  color: black;
+  background-color: var(--secondary-color);
+  border: .1em solid var(--tertiary-color);
+  border-radius: 0.4em;
+  box-shadow: none;
+  flex: 1;
+
+  font-family: var(--font-family);
+  font-size: 0.9rem;
+
+  padding: 1em 1em;
+}
+</style>

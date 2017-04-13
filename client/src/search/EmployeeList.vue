@@ -1,11 +1,13 @@
 <template>
   <div v-if="ready">
-    <sort-select
-        property-name="salary"
-        :value="sortBySalaryDirection"
-        :on-clear="clearSort"
-        :on-ascend="sortBySalaryAsc"
-        :on-descend="sortBySalaryDesc"></sort-select>
+    <div class="list-controls">
+      <sort-select
+          property-name="salary"
+          :value="sortBySalaryDirection"
+          :on-clear="clearSort"
+          :on-ascend="sortBySalaryAsc"
+          :on-descend="sortBySalaryDesc"></sort-select>
+    </div>
 
     <employee-list-entry
         v-for="(employee, idx) in employees"
@@ -64,3 +66,15 @@ export default {
   },
 }
 </script>
+
+<style>
+.list-controls {
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: flex-end;
+}
+
+.list-controls > * {
+  flex: 0;
+}
+</style>
