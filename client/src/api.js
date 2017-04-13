@@ -8,10 +8,10 @@ const mockEmployees = [
   { name: 'Doctor John A. Zoidberg', title: 'Staff Doctor', department: 'Planet Express', salary: 5000, rating: 3.0, id: 6, photo: 'https://uproxx.files.wordpress.com/2014/10/zoidberg.jpg?quality=100&w=600' },
 ]
 
-const mockComments = [
-  { user: 'John', text: `I've seen better`, rating: 2.0, id: 0 },
-  { user: 'Doge', text: 'Much amaze', rating: 5.0, id: 1 },
-  { user: 'Ben', text: `I'm Ben!`, rating: 4.0, id: 2 },
+const mockRatings = [
+  { user: 'John', text: `I've seen better`, value: 2.0, id: 0 },
+  { user: 'Doge', text: 'Much amaze', value: 5.0, id: 1 },
+  { user: 'Ben', text: `I'm Ben!`, value: 4.0, id: 2 },
 ]
 
 export function getEmployees() {
@@ -22,10 +22,10 @@ export function getEmployees() {
   })
 }
 
-export function getComments(id) {
+export function getRatings(id) {
   return new Promise((resolve) => {
     setTimeout(() => {
-      resolve(mockComments)
+      resolve(mockRatings)
     }, 300)
   })
 }
@@ -38,7 +38,7 @@ export function getFeatured() {
   }, 300)
 }
 
-export function submitRating({ rating, comment, user, employee }) {
+export function submitRating({ value, comment, user, employee }) {
   return new Promise((resolve) => {
     setTimeout(() => {
       resolve()

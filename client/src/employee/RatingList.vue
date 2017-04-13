@@ -1,9 +1,9 @@
 <template>
 
-  <div class="comments" v-if="ready">
-    <comment v-for="comment in comments"
-             :comment="comment"
-             :key="comment.id"></comment>
+  <div class="ratings" v-if="ready">
+    <rating v-for="rating in ratings"
+             :rating="rating"
+             :key="rating.id"></rating>
   </div>
 
   <div v-else>
@@ -14,32 +14,32 @@
 
 <script>
 import Loading from '../components/Loading.vue'
-import Comment from './Comment.vue'
+import Rating from './Rating.vue'
 
 export default {
   components: {
     Loading,
-    Comment,
+    Rating,
   },
 
-  props: ['maybeComments'],
+  props: ['maybeRatings'],
 
   computed: {
     ready() {
-      return this.maybeComments.matchWith({
+      return this.maybeRatings.matchWith({
         Just: () => true,
         Nothing: () => false
       })
     },
-    comments() {
-      return this.maybeComments.getOrElse([])
+    ratings() {
+      return this.maybeRatings.getOrElse([])
     }
   }
 }
 </script>
 
 <style scoped>
-.comments {
+.ratings {
   padding: 1em;
   background-color: var(--tertiary-color);
 }

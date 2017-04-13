@@ -1,12 +1,12 @@
 <template>
-  <div class="comment">
-    <p class="text">{{ comment.text }}</p>
+  <div class="rating">
+    <p class="text">{{ rating.text }}</p>
     <div class="info">
       <star-rating
           class="rating"
-          :rating="comment.rating"
+          :rating="rating.value"
           :hideText="true"></star-rating>
-      <p class="user">{{ comment.user }}</p>
+      <p class="user">{{ rating.user }}</p>
     </div>
   </div>
 </template>
@@ -15,7 +15,7 @@
 import StarRating from '../components/StarRating.vue'
 
 export default {
-  props: ['comment'],
+  props: ['rating'],
   components: {
     StarRating,
   },
@@ -23,13 +23,13 @@ export default {
 </script>
 
 <style scoped>
-.comment {
+.rating {
   background-color: var(--secondary-color);
   padding: 0.5em;
   margin-bottom: 1em;
 }
 
-.comment:last-child {
+.rating:last-child {
   margin-bottom: 0;
 }
 

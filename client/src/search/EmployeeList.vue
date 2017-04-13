@@ -1,9 +1,16 @@
 <template>
   <div v-if="ready">
-      <employee-list-entry
-          v-for="employee in employees"
-          :key="employee.id"
-          :employee="employee" />
+    <select v-model="filter">
+      <option disabled>Sort by Salary</option>
+      <option>Disable</option>
+      <option>Highest First</option>
+      <option>Lowest First</option>
+    </select>
+
+    <employee-list-entry
+        v-for="employee in employees"
+        :key="employee.id"
+        :employee="employee" />
   </div>
 
   <div v-else>
