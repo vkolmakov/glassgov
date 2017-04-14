@@ -9,7 +9,9 @@
     "build": "cross-env NODE_ENV=production webpack --progress --hide-modules"
   },
   "dependencies": {
+    "chart.js": "^2.5.0",
     "folktale": "^2.0.0-alpha3",
+    "hchs-vue-charts": "^1.2.8",
     "ramda": "^0.23.0",
     "vue": "^2.2.1",
     "vue-router": "2.2.1",

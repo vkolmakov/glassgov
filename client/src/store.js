@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 
-import { Maybe, identity, filter, find, redirectTo, sort, prop, ascend, descend } from './utils'
+import { Maybe, identity, filter, find, redirectTo, sort, prop, ascend, descend, take } from './utils'
 import { routeNames } from './router'
 import { setAuthToken, clearAuthToken } from './auth/actions'
 import * as api from './api'
@@ -210,6 +210,22 @@ const store = new Vuex.Store({
     getEmployeeById: state => (id) => {
       const findById = find(e => e.id === id)
       return state.employees.all.map(findById)
+    },
+    getTopEmployeesBySalary: state => (count) => {
+      const descendBySalary = descend(prop('salary'))
+
+      return state.employees.all
+        .map(sort(descendBySalary))
+        .map(take(count))
+        .getOrElse([])
+    },
+    getTopEmployeesByRating: state => (count) => {
+      const descendByRating = descend(prop('rating'))
+
+      return state.employees.all
+        .map(sort(descendByRating))
+        .map(take(count))
+        .getOrElse([])
     },
   },
 })
