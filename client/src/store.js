@@ -1,7 +1,9 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 
-import { Maybe, identity, filter, find, redirectTo, sort, prop, ascend, descend, take } from './utils'
+import { Maybe, identity, find,
+         redirectTo, sort, prop, ascend,
+         descend, take, createSearchEngine } from './utils'
 import { routeNames } from './router'
 import { setAuthToken, clearAuthToken } from './auth/actions'
 import * as api from './api'
@@ -9,6 +11,8 @@ import * as api from './api'
 import { SORT_TYPES } from './constants'
 
 Vue.use(Vuex)
+
+let SearchEngine
 
 const mutationTypes = {
   LOAD_EMPLOYEES: 'LOAD_EMPLOYEES',
@@ -56,6 +60,7 @@ const store = new Vuex.Store({
 
   mutations: {
     [mutationTypes.LOAD_EMPLOYEES](state, employees) {
+      SearchEngine = createSearchEngine(employees)
       state.employees.all = Maybe.Just(employees)
       state.employees.selected = Maybe.Just(employees)
     },
@@ -63,8 +68,7 @@ const store = new Vuex.Store({
       state.employees.all = Maybe.Just([])
     },
     [mutationTypes.SELECT_EMPLOYEES](state, query) {
-      const isMatchingQuery = e => e.name.toLowerCase().includes(query.toLowerCase())
-      state.employees.selected = state.employees.all.map(filter(isMatchingQuery))
+      state.employees.selected = Maybe.Just(SearchEngine.search(query))
     },
     [mutationTypes.CLEAR_EMPLOYEE_SELECTION](state) {
       state.employees.selected = state.employees.all.map(identity)
@@ -93,31 +97,38 @@ const store = new Vuex.Store({
 
     [mutationTypes.UI_SEARCH_SORT_CLEAR](state) {
       state.ui.search.sort.salary = Maybe.Nothing()
-      state.employees.selected = state.employees.all.map(identity)
+      state.ui.search.sort.rating = Maybe.Nothing()
+      state.employees.selected = state.employees.selected.map(sort(prop('id')))
+      state.employees.all = state.employees.all.map(sort(prop('id')))
+
     },
 
     [mutationTypes.UI_SEARCH_SORT_SALARY_ASC](state) {
       state.ui.search.sort.salary = Maybe.Just(SORT_TYPES.ASC)
       const ascendBySalary = ascend(prop('salary'))
       state.employees.selected = state.employees.selected.map(sort(ascendBySalary))
+      state.employees.all = state.employees.all.map(sort(ascendBySalary))
     },
 
     [mutationTypes.UI_SEARCH_SORT_SALARY_DESC](state) {
       state.ui.search.sort.salary = Maybe.Just(SORT_TYPES.DESC)
       const descendBySalary = descend(prop('salary'))
       state.employees.selected = state.employees.selected.map(sort(descendBySalary))
+      state.employees.all = state.employees.all.map(sort(descendBySalary))
     },
 
     [mutationTypes.UI_SEARCH_SORT_RATING_ASC](state) {
       state.ui.search.sort.rating = Maybe.Just(SORT_TYPES.ASC)
       const ascendByRating = ascend(prop('rating'))
       state.employees.selected = state.employees.selected.map(sort(ascendByRating))
+      state.employees.all = state.employees.all.map(sort(ascendByRating))
     },
 
     [mutationTypes.UI_SEARCH_SORT_RATING_DESC](state) {
       state.ui.search.sort.rating = Maybe.Just(SORT_TYPES.DESC)
       const descendByRating = descend(prop('rating'))
       state.employees.selected = state.employees.selected.map(sort(descendByRating))
+      state.employees.all = state.employees.all.map(sort(descendByRating))
     },
   },
 
@@ -129,7 +140,7 @@ const store = new Vuex.Store({
     selectEmployees({ commit }, query) {
       commit(mutationTypes.SELECT_EMPLOYEES, query)
     },
-    clearEmployeeSelection({ commit }) {
+    clearEmployeeSelection({ commit, state, dispatch }) {
       commit(mutationTypes.CLEAR_EMPLOYEE_SELECTION)
     },
 
@@ -142,8 +153,10 @@ const store = new Vuex.Store({
     },
 
     search({ dispatch }, query) {
-      dispatch('setSearchQuery', query)
-        .then(() => dispatch('selectEmployees', query))
+      dispatch('setSearchQuery', query).then(
+        () => query
+          ? dispatch('selectEmployees', query)
+          : dispatch('clearEmployeeSelection'))
     },
     clearSearch({ dispatch }) {
       dispatch('setSearchQuery', '')
@@ -155,19 +168,23 @@ const store = new Vuex.Store({
     },
 
     sortBySalaryAsc({ commit, dispatch }) {
-      commit(mutationTypes.UI_SEARCH_SORT_SALARY_ASC)
+      dispatch('clearSort').then(
+        () => commit(mutationTypes.UI_SEARCH_SORT_SALARY_ASC))
     },
 
-    sortBySalaryDesc({ commit }) {
-      commit(mutationTypes.UI_SEARCH_SORT_SALARY_DESC)
+    sortBySalaryDesc({ commit, dispatch }) {
+      dispatch('clearSort').then(
+        () => commit(mutationTypes.UI_SEARCH_SORT_SALARY_DESC))
     },
 
     sortByRatingAsc({ commit, dispatch }) {
-      commit(mutationTypes.UI_SEARCH_SORT_RATING_ASC)
+      dispatch('clearSort').then(
+        () => commit(mutationTypes.UI_SEARCH_SORT_RATING_ASC))
     },
 
-    sortByRatingDesc({ commit }) {
-      commit(mutationTypes.UI_SEARCH_SORT_RATING_DESC)
+    sortByRatingDesc({ commit, dispatch }) {
+      dispatch('clearSort').then(
+        () => commit(mutationTypes.UI_SEARCH_SORT_RATING_DESC))
     },
 
     loadFeatured({ commit }) {
