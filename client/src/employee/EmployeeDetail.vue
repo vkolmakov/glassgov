@@ -3,7 +3,7 @@
   <div>
     <employee :employee="employee" />
 
-    <add-rating-form v-if="authenticated"
+    <add-rating-form v-if="authenticated && !alreadyRated"
                       :employee="employee"
                       :afterSubmitted="loadRatings"></add-rating-form>
 
@@ -22,20 +22,22 @@ import RatingList from './RatingList.vue'
 import AddRatingForm from './AddRatingForm.vue'
 import ErrorMessage from '../components/ErrorMessage.vue'
 
-import { getRatings } from '../api'
+import { getRatings, getRatingStatusForUser } from '../api'
 import { Maybe, compose } from '../utils'
 import { missingEmployee } from '../constants'
 
 export default {
   data() {
     return {
-      id: parseInt(this.$route.params.id, 10),
+      id: this.$route.params.id,
       maybeRatings: Maybe.Nothing(),
       maybeError: Maybe.Nothing(),
+      alreadyRated: true,
     }
   },
 
   created() {
+    this.loadRatingStatusForUser()
     this.loadRatings()
   },
 
@@ -68,14 +70,23 @@ export default {
   },
 
   methods: {
+    loadRatingStatusForUser() {
+      if (this.authenticated) {
+        getRatingStatusForUser(this.id)
+          .then(result => this.alreadyRated = result)
+      }
+    },
+
     loadRatings() {
-      const { id, clearRatings, clearError, setError, setRatings } = this
+      const { id, clearRatings, clearError,
+              setError, setRatings, loadRatingStatusForUser } = this
 
       clearRatings()
       clearError()
 
       const handleSuccess = ratings => {
         setRatings(ratings)
+        loadRatingStatusForUser()
         clearError()
       }
 
