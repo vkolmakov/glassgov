@@ -1,6 +1,6 @@
 <template>
   <select @change="onSelect" :value="value">
-    <option value="">Sort by {{ propertyName }}</option>
+    <option disabled value="">Sort by {{ propertyName }}</option>
     <option :value="SORT_TYPES.DESC">Highest First</option>
     <option :value="SORT_TYPES.ASC">Lowest First</option>
   </select>
