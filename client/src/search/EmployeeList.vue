@@ -88,5 +88,6 @@ export default {
 
 .list-controls > * {
   flex: 0;
+  margin-left: 0.5em;
 }
 </style>
