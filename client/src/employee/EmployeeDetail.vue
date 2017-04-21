@@ -3,13 +3,13 @@
   <div>
     <employee :employee="employee" />
 
-    <add-comment-form v-if="authenticated"
+    <add-rating-form v-if="authenticated && !alreadyRated"
                       :employee="employee"
-                      :afterSubmitted="loadComments"></add-comment-form>
+                      :afterSubmitted="loadRatings"></add-rating-form>
 
     <error-message :maybeMessage="maybeError"></error-message>
 
-    <comment-list :maybeComments="maybeComments" />
+    <rating-list :maybeRatings="maybeRatings" />
   </div>
 
 </template>
@@ -18,31 +18,33 @@
 import { mapGetters, mapState } from 'vuex'
 
 import Employee from './Employee.vue'
-import CommentList from './CommentList.vue'
-import AddCommentForm from './AddCommentForm.vue'
+import RatingList from './RatingList.vue'
+import AddRatingForm from './AddRatingForm.vue'
 import ErrorMessage from '../components/ErrorMessage.vue'
 
-import { getComments } from '../api'
+import { getRatings, getRatingStatusForUser } from '../api'
 import { Maybe, compose } from '../utils'
 import { missingEmployee } from '../constants'
 
 export default {
   data() {
     return {
-      id: parseInt(this.$route.params.id, 10),
-      maybeComments: Maybe.Nothing(),
+      id: this.$route.params.id,
+      maybeRatings: Maybe.Nothing(),
       maybeError: Maybe.Nothing(),
+      alreadyRated: true,
     }
   },
 
   created() {
-    this.loadComments()
+    this.loadRatingStatusForUser()
+    this.loadRatings()
   },
 
   components: {
     Employee,
-    CommentList,
-    AddCommentForm,
+    RatingList,
+    AddRatingForm,
     ErrorMessage,
   },
 
@@ -55,7 +57,7 @@ export default {
       return maybeEmployee.getOrElse(missingEmployee)
     },
 
-    errorLoadingComments() {
+    errorLoadingRatings() {
       return this.maybeError.matchWith({
         Nothing: () => false,
         Just: () => true,
@@ -68,35 +70,44 @@ export default {
   },
 
   methods: {
-    loadComments() {
-      const { id, clearComments, clearError, setError, setComments } = this
+    loadRatingStatusForUser() {
+      if (this.authenticated) {
+        getRatingStatusForUser(this.id)
+          .then(result => this.alreadyRated = result)
+      }
+    },
 
-      clearComments()
+    loadRatings() {
+      const { id, clearRatings, clearError,
+              setError, setRatings, loadRatingStatusForUser } = this
+
+      clearRatings()
       clearError()
 
-      const handleSuccess = comments => {
-        setComments(comments)
+      const handleSuccess = ratings => {
+        setRatings(ratings)
+        loadRatingStatusForUser()
         clearError()
       }
 
       const handleError = error => {
-        clearComments()
+        clearRatings()
         setError(error.message)
       }
 
-      getComments(id)
+      getRatings(id)
         .then(
           handleSuccess,
           handleError
         )
     },
 
-    setComments(comments) {
-      this.maybeComments = Maybe.Just(comments)
+    setRatings(ratings) {
+      this.maybeRatings = Maybe.Just(ratings)
     },
 
-    clearComments() {
-      this.maybeComments = Maybe.Nothing()
+    clearRatings() {
+      this.maybeRatings = Maybe.Nothing()
     },
 
     clearError() {

@@ -1,8 +1,8 @@
 <template>
 
-  <div v-if="!isSubmitting" class="add-comment">
+  <div v-if="!isSubmitting" class="add-rating">
     <div class="top">
-      <textarea name="comment-text"
+      <textarea name="rating-text"
                 v-model="comment"
                 :placeholder="`Comment on ${employee.name} here...`"></textarea>
     </div>
@@ -15,7 +15,7 @@
     </div>
   </div>
 
-  <div v-else class="add-comment">
+  <div v-else class="add-rating">
     <loading></loading>
   </div>
 
@@ -34,7 +34,7 @@ export default {
 
   data() {
     return {
-      rating: 0,
+      value: 0,
       comment: '',
       isSubmitting: false,
     }
@@ -47,7 +47,7 @@ export default {
 
   methods: {
     onSelectRating(rating) {
-      this.rating = rating
+      this.value = rating
     },
 
     displaySpinner() {
@@ -62,7 +62,7 @@ export default {
       this.displaySpinner()
 
       const submission = {
-        rating: this.rating,
+        value: this.value,
         comment: this.comment,
         user: this.user,
         employee: this.employee,
@@ -83,7 +83,7 @@ export default {
 </script>
 
 <style>
-.add-comment {
+.add-rating {
   padding: 1em;
   margin-bottom: 1em;
 
@@ -92,12 +92,12 @@ export default {
   background-color: var(--tertiary-color)
 }
 
-.add-comment > .top {
+.add-rating > .top {
   display: flex;
   padding-bottom: 1em;
 }
 
-.add-comment > .top > textarea {
+.add-rating > .top > textarea {
   flex: 1;
   resize: none;
   font-size: 1rem;
@@ -107,17 +107,17 @@ export default {
   border-radius: 0.4em;
 }
 
-.add-comment > .bottom {
+.add-rating > .bottom {
   display: flex;
   justify-content: flex-end;
   align-items: center;
 }
 
-.add-comment > .bottom > * {
+.add-rating > .bottom > * {
   margin-left: 1em;
 }
 
-.add-comment > .bottom > button {
+.add-rating > .bottom > button {
   background-color: var(--primary-color);
   color: var(--secondary-color);
 
@@ -130,7 +130,7 @@ export default {
   font-size: 0.9rem;
 }
 
-.add-comment > .bottom > button:hover {
+.add-rating > .bottom > button:hover {
   border: .1em solid var(--secondary-color);
 }
 </style>

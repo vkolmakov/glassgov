@@ -11,6 +11,7 @@ import SignIn from './auth/SignIn.vue'
 import SignUp from './auth/SignUp.vue'
 import SignOut from './auth/SignOut.vue'
 
+import Visualizations from './visualizations/Visualizations.vue'
 
 Vue.use(VueRouter)
 
@@ -21,6 +22,7 @@ const routes = [
   { path: '/signin', component: SignIn, name: 'signin' },
   { path: '/signup', component: SignUp, name: 'signup' },
   { path: '/signout', component: SignOut, name: 'signout' },
+  { path: '/visualize', component: Visualizations, name: 'visualize' },
 ]
 
 export const routeNames = routes.reduce((acc, r) => ({ [r.name]: r.name, ...acc }), {})

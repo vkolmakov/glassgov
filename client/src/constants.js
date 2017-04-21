@@ -9,3 +9,8 @@ export const missingEmployee = {
 }
 
 export const MIN_PASSWORD_LENGTH = 8
+
+export const SORT_TYPES = {
+  ASC: 'ASC',
+  DESC: 'DESC',
+}
