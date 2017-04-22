@@ -94,7 +94,7 @@ export default {
     },
 
     setError() {
-      this.maybeError = Maybe.Just('An error ocurred')
+      this.maybeError = Maybe.Just('An account with this email already exists.')
     },
 
     clearError() {
