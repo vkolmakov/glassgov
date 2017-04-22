@@ -17,11 +17,11 @@ app.use(cors())
 app.use(bodyParser.json({ type: '*/*' }))
 router(app)
 
-const distDir = path.join(__dirname, '../client/dist/')
+const distDir = path.join(__dirname, '../dist/')
 app.use('/dist', express.static(distDir))
 
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, '../client/index.html'))
+  res.sendFile(path.join(__dirname, '../index.html'))
 })
 
 const port = process.env.PORT || 3090

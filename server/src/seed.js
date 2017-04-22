@@ -1,20 +1,13 @@
 const mongoose = require('mongoose')
 const Rx = require('rxjs/Rx')
 const R = require('ramda')
+const axios = require('axios')
 
 const config = require('./config')
 
 const Employee = require('./models/employee')
 const Rating = require('./models/rating')
 const User = require('./models/user')
-
-const employees = [
-  { name: 'Philip J. Fry', title: 'Delivery Boy', department: 'Planet Express Crew', salary: 30000, rating: 0, photo: 'https://pbs.twimg.com/profile_images/806313367052976129/CketiJDK.jpg', ratingsCount: 0 },
-  { name: 'Turanga Leela', title: 'Captain', department: 'Planet Express Crew', salary: 50000, rating: 0, photo: 'https://geekygirlfilmblog.files.wordpress.com/2014/04/turanga_leela_314.png', ratingsCount: 0 },
-  { name: 'Bender Bending Rodrigez', title: 'Industrial Robot', department: 'Planet Express Crew', salary: 30000, rating: 0, photo: 'http://idaconcpts.com/wp-content/uploads/bender-smoking.jpg', ratingsCount: 0 },
-  { name: 'Amy Wong', title: 'Intern', department: 'Planet Express Crew', salary: 0, rating: 0, photo: 'https://upload.wikimedia.org/wikipedia/it/1/12/Amy_wong_-_futurama.png', ratingsCount: 0 },
-  { name: 'Hermes Conrad', title: 'Bureaucrat and Accountant', department: 'Planet Express', salary: 50000, rating: 0, photo: 'http://vignette1.wikia.nocookie.net/futurama/images/9/95/Hermes_Conrad.png/revision/latest?cb=20090809214221&path-prefix=it', ratingsCount: 0 },
-]
 
 const ratings = [
   { text: `I've seen better`, value: 2.0 },
@@ -53,8 +46,6 @@ const generateUsers = function* () {
   }
 }
 
-mongoose.connect(config.mongoAddress)
-
 function insertEmployee(employee) {
   return new Promise((res, rej) => {
     employee.save(function (err, e) {
@@ -79,29 +70,81 @@ function insertUser(user) {
   })
 }
 
+function employees$() {
+  const capitalizeWord = R.compose(
+    R.join(''),
+    R.juxt([R.compose(R.toUpper, R.head), R.tail]))
+
+  const capitalizeSentence = R.compose(
+    R.join(' '),
+    R.map(capitalizeWord),
+    R.split(/\s+/))
+
+  const stripPunctuation = R.replace(/[^\w\s]|_/g, '')
+
+  const processText = R.compose(
+    capitalizeSentence,
+    stripPunctuation,
+    R.toLower)
+
+  const parseEmployee = rawData => ({
+    name: processText(rawData[8]),
+    title: processText(rawData[9]),
+    department: processText(rawData[10]),
+    salary: parseInt(rawData[11], 10),
+    ratingsCount: 0,
+    rating: 0,
+  })
+
+  const sortBySalaryAsc = R.sortBy(
+    R.compose(Number, R.prop(11)))
+
+  const sortBySalaryDesc = R.compose(
+    R.reverse, sortBySalaryAsc)
+
+  const requestData = () =>
+        axios.get('https://data.cityofchicago.org/api/views/xzkq-xp2w/rows.json?accessType=DOWNLOAD')
+        .then(R.identity, console.error)
+
+  return Rx.Observable.fromPromise(requestData())
+    .map(R.compose(R.prop('data'), R.prop('data'))) // ha!
+    .map(sortBySalaryDesc)
+    .flatMap(data => Rx.Observable.from(data))
+    .take(100)
+    .map(parseEmployee)
+}
+
 function populateDatabase() {
   const userId$ = Rx.Observable.from(generateUsers())
-        .take(employees.length)
+        .take(100)
         .map(u => new User(u))
         .flatMap(insertUser)
 
-  const employeeId$ = Rx.Observable.from(employees)
+  const employeeId$ = employees$()
         .map(e => new Employee(e))
         .flatMap(insertEmployee)
 
   const ratings$ = employeeId$
         .zip(userId$, (eid, uid) => [eid, uid])
         .map(([employeeId, userId]) => R.mergeAll([getRandomFrom(ratings), { employee: employeeId, user: userId }]))
-        .do(console.log)
         .map(r => new Rating(r))
         .flatMap(insertRating)
 
 
-  ratings$.subscribe(
+  return ratings$.subscribe(
     R.identity,
-    R.identity,
+    console.error,
     () => console.log('done!')
   )
 }
 
-setTimeout(populateDatabase, 1000)
+function dropDatabase() {
+  return Promise.all([Employee.remove({}),
+                      Rating.remove({}),
+                      User.remove({})])
+}
+
+mongoose.connect(config.mongoAddress)
+  .then(dropDatabase)
+  .then(() => console.log('Dropped the database'))
+  .then(populateDatabase)
