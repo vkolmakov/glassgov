@@ -16,9 +16,12 @@
     </div>
 
     <employee-list-entry
-        v-for="(employee, idx) in employees"
+        v-for="(employee, idx) in renderedEmployees"
         :key="idx"
         :employee="employee" />
+    <infinite-loading
+        :on-infinite="onInfinite"
+        ref="infiniteLoading"></infinite-loading>
   </div>
 
   <div v-else>
@@ -29,7 +32,9 @@
 
 <script>
 import { mapState, mapActions } from 'vuex'
+import { slice } from '../utils'
 
+import InfiniteLoading from 'vue-infinite-loading'
 import EmployeeListEntry from './EmployeeListEntry.vue'
 import SortSelect from './SortSelect.vue'
 import Loading from '../components/Loading.vue'
@@ -40,9 +45,38 @@ export default {
     EmployeeListEntry,
     SortSelect,
     Loading,
+    InfiniteLoading,
+  },
+
+  data() {
+    return {
+      renderedEmployees: [],
+      batchesRendered: 0,
+    }
   },
 
   methods: {
+    onEmployeeListUpdate() {
+      this.$nextTick(() => {
+        this.batchesRendered = 0
+        this.renderedEmployees = []
+        this.$refs.infiniteLoading.$emit('$InfiniteLoading:reset')
+      })
+    },
+
+    onInfinite() {
+      const renderAtOnce = 10
+      this.batchesRendered += 1
+
+      const renderedCount = this.batchesRendered * renderAtOnce
+      this.renderedEmployees = slice(0, renderedCount, this.employees)
+
+      if (renderedCount > this.employees.length)
+        this.$refs.infiniteLoading.$emit('$InfiniteLoading:complete')
+      else
+        this.$refs.infiniteLoading.$emit('$InfiniteLoading:loaded')
+    },
+
     ...mapActions({
       clearSort: 'clearSort',
       sortBySalaryAsc: 'sortBySalaryAsc',
@@ -70,7 +104,10 @@ export default {
     },
 
     ...mapState({
-      maybeEmployees: state => state.employees.selected,
+      maybeEmployees: function (state) {
+        this.onEmployeeListUpdate()
+        return state.employees.selected
+      },
       maybeSortBySalaryDirection: state => state.ui.search.sort.salary,
       maybeSortByRatingDirection: state => state.ui.search.sort.rating,
     }),
