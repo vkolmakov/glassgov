@@ -2,9 +2,9 @@
 
   <div class="search-group">
     <input type="search"
+           class="search-bar"
            placeholder="Start typing to search here"
            v-model="query"
-           @keyup="onInput"
            @search="onSearchEventCleanUp"
            @focus="onFocus" />
   </div>
@@ -13,12 +13,37 @@
 
 <script>
 import { mapActions, mapState } from 'vuex'
+import Rx from 'rxjs/Rx'
+import { prop } from '../utils'
 
 export default {
+  created() {
+    this.query = this.initialQuery
+  },
+
+  data() {
+    return {
+      query: ''
+    }
+  },
+
   computed: {
     ...mapState({
-      query: state => state.ui.search.query,
+      initialQuery: state => state.ui.search.query,
     })
+  },
+
+  subscriptions() {
+    const { search } = this
+
+    const query$ = this.$fromDOMEvent('input.search-bar', 'keyup')
+                       .pluck('target', 'value')
+                       .distinctUntilChanged()
+                       .debounceTime(300)
+
+    return {
+      query$: query$.switchMap(search)
+    }
   },
 
   methods: {
@@ -32,17 +57,8 @@ export default {
         this.clearSearch()
       }
     },
-
-    onInput(e) {
-      const query = e.target.value
-      this.search(query)
-    },
     onFocus() {
       this.openSearch()
-    },
-    clearSearch() {
-      const { clearSearch } = this
-      clearSearch()
     },
     ...mapActions({
       openSearch: 'openSearch',
